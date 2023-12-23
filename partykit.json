@@ -1,0 +1,8 @@
+{
+  "name": "collab-todo-party",
+  "main": "party/index.ts",
+  "compatibilityDate": "2023-12-24",
+  "parties": {
+    "notifications": "party/notifications.ts"
+  }
+}
