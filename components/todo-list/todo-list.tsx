@@ -9,11 +9,12 @@ import type {
   AddNewTodo,
   DeleteTodo,
   TodoToggleStatus,
-} from "../../app/l/[id]/actions";
+} from "@/server/todo/actions";
 import usePartySocket from "partysocket/react";
 import { ServerAction } from "../../party";
 import { NotificationAction } from "../../party/notifications";
 import { Session } from "next-auth";
+import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 
 export type TodoListProps = {
   // Component Props
@@ -172,15 +173,37 @@ export const TodoList = ({
     <>
       {canDoActions && <AddTodo onSubmit={handleSubmit} />}
       <div className={"mb-3"} />
-      {todo.map((task) => (
-        <TodoListItem
-          actionsEnabled={canDoActions}
-          todo={task}
-          key={task.id}
-          onToggle={handleChange}
-          onDelete={handleDelete}
-        />
-      ))}
+      <MotionConfig reducedMotion="user">
+        <AnimatePresence>
+          {todo.map((task, index) => (
+            <motion.div
+              initial={{
+                x: -15,
+                opacity: 0,
+              }}
+              animate={{
+                x: 0,
+                opacity: 1,
+                transition: {
+                  delay: 0.025 * index,
+                },
+              }}
+              exit={{
+                x: 15,
+                opacity: 0,
+              }}
+              key={task.id}
+            >
+              <TodoListItem
+                actionsEnabled={canDoActions}
+                todo={task}
+                onToggle={handleChange}
+                onDelete={handleDelete}
+              />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </MotionConfig>
     </>
   );
 };

@@ -12,7 +12,7 @@ import {
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
-import type { MakeCategoryPublic } from "../../app/l/[id]/actions";
+import type { MakeCategoryPublic } from "@/server/todo-category/actions";
 import usePartySocket from "partysocket/react";
 import { NotificationAction } from "../../party/notifications";
 import { Session } from "next-auth";

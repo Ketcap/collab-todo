@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { Dialog, DialogContent } from "../ui/dialog";
+import { ScrollArea } from "../ui/scroll-area";
 
 export type InterceptingModalProps = {
   children: React.ReactNode;

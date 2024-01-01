@@ -1,9 +1,12 @@
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
-import { prisma } from "../lib/prisma";
+import { nanoId } from "../../lib/id";
+import { prisma } from "../../lib/prisma";
+
 import { authOptions } from "@/lib/auth";
+
 import type { TodoCategorySchema } from "@/components/add-todo/lib";
-import { nanoId } from "../lib/id";
 
 export type AddNewCategory = typeof addNewCategory;
 export const addNewCategory = async (values: TodoCategorySchema) => {
@@ -19,4 +22,18 @@ export const addNewCategory = async (values: TodoCategorySchema) => {
   });
 
   return category;
+};
+
+export type MakeCategoryPublic = typeof makeCategoryPublic;
+export const makeCategoryPublic = async (id: string) => {
+  "use server";
+  await prisma.todoCategory.update({
+    where: {
+      id,
+    },
+    data: {
+      isPublic: true,
+    },
+  });
+  revalidatePath(`/l/${id}`);
 };

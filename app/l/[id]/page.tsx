@@ -9,21 +9,23 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../../components/ui/card";
-import { Button } from "../../../components/ui/button";
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-import { prisma } from "../../../lib/prisma";
-import { TodoList } from "../../../components/todo-list/todo-list";
-import { MakePublicButton } from "../../../components/make-public/button";
+import { TodoList } from "@/components/todo-list/todo-list";
+import { MakePublicButton } from "@/components/make-public/button";
+
 import {
   addNewTodo,
-  makeCategoryPublic,
   todoToggleStatus,
   deleteTodo,
-} from "./actions";
-import { authOptions } from "../../../pages/api/auth/[...nextauth]";
+} from "@/server/todo/actions";
 
-export const revalidate = 5;
+import { prisma } from "@/lib/prisma";
+import { authOptions } from "@/lib/auth";
+import { makeCategoryPublic } from "@/server/todo-category/actions";
+
+export const dynamic = "force-dynamic";
 
 export default async function Home({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);

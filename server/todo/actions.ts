@@ -1,6 +1,5 @@
-import { revalidatePath } from "next/cache";
-import { nanoId } from "../../../lib/id";
-import { prisma } from "../../../lib/prisma";
+import { nanoId } from "../../lib/id";
+import { prisma } from "../../lib/prisma";
 
 export type AddNewTodo = typeof addNewTodo;
 export const addNewTodo = async (
@@ -42,18 +41,4 @@ export const deleteTodo = async (id: string) => {
       id,
     },
   });
-};
-
-export type MakeCategoryPublic = typeof makeCategoryPublic;
-export const makeCategoryPublic = async (id: string) => {
-  "use server";
-  await prisma.todoCategory.update({
-    where: {
-      id,
-    },
-    data: {
-      isPublic: true,
-    },
-  });
-  revalidatePath(`/l/${id}`);
 };

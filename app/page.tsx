@@ -1,21 +1,21 @@
 import { TodoCategory } from "@prisma/client";
 import { getServerSession } from "next-auth";
 
-import { authOptions } from "../pages/api/auth/[...nextauth]";
-
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../components/ui/card";
-import { CategoryList } from "../components/todo-list/category-list";
+} from "@/components/ui/card";
+import { CategoryList } from "@/components/todo-list/category-list";
 
-import { prisma } from "../lib/prisma";
-import { addNewCategory } from "./actions";
+import { prisma } from "@/lib/prisma";
 
-export const revalidate = 5;
+import { addNewCategory } from "@/server/todo-category/actions";
+import { authOptions } from "@/lib/auth";
+
+export const dynamic = "force-dynamic";
 
 export default async function MainPage() {
   const session = await getServerSession(authOptions);

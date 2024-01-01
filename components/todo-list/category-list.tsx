@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import usePartySocket from "partysocket/react";
 import { Session } from "next-auth";
+import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -16,7 +17,7 @@ import { TodoCategorySchema, todoCategorySchema } from "../add-todo/lib";
 import { NotificationAction } from "../../party/notifications";
 import { Checkbox } from "../ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
-import { AddNewCategory } from "../../app/actions";
+import { AddNewCategory } from "@/server/todo-category/actions";
 
 export type CategoryListProps = {
   categories: TodoCategory[];
@@ -30,6 +31,8 @@ export const CategoryList = ({
   onSubmit,
   session,
 }: CategoryListProps) => {
+  const shouldReduceMotion = useReducedMotion();
+
   const { push } = useRouter();
   const [list, setList] = useState<TodoCategory[]>(categories);
   const [isLoading, setIsLoading] = useState(false);
@@ -75,48 +78,68 @@ export const CategoryList = ({
   });
 
   return (
-    <div className="grid grid-flow-row gap-3">
-      <Form {...form}>
-        <form className="flex flex-col" onSubmit={handleSubmit}>
-          <div className="flex flex-row flex-1">
-            <Input
-              {...form.register("name")}
-              className="flex-1 mr-4"
-              placeholder="Things to do in Blackwing Lair "
+    <MotionConfig reducedMotion="user">
+      <div className="grid grid-flow-row gap-3 overflow-hidden">
+        <Form {...form}>
+          <form className="flex flex-col" onSubmit={handleSubmit}>
+            <div className="flex flex-row flex-1">
+              <Input
+                {...form.register("name")}
+                className="flex-1 mr-4"
+                placeholder="Things to do in Blackwing Lair "
+              />
+              <Button
+                className="w-24"
+                variant="secondary"
+                isLoading={isLoading}
+                type="submit"
+              >
+                Add List
+              </Button>
+            </div>
+            <FormField
+              control={form.control}
+              name="isPublic"
+              render={({ field }) => (
+                <FormItem className="flex gap-2 pt-3 space-y-0 items-center">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormLabel>Make my list Public</FormLabel>
+                </FormItem>
+              )}
             />
-            <Button
-              className="w-24"
-              variant="secondary"
-              isLoading={isLoading}
-              type="submit"
+          </form>
+        </Form>
+        <Separator />
+        {list.map((category, index) => (
+          <Fragment key={index}>
+            <motion.div
+              initial={{ y: -25, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              key={category.id}
+              transition={{
+                delay: index * 0.15,
+                ease: "easeInOut",
+              }}
             >
-              Add List
-            </Button>
-          </div>
-          <FormField
-            control={form.control}
-            name="isPublic"
-            render={({ field }) => (
-              <FormItem className="flex gap-2 pt-3 space-y-0 items-center">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <FormLabel>Make my list Public</FormLabel>
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
-      <Separator />
-      {list.map((category, index) => (
-        <Fragment key={category.id}>
-          <CategoryListItem {...category} key={category.id} />
-          {categories.length !== index + 1 && <Separator />}
-        </Fragment>
-      ))}
-    </div>
+              <CategoryListItem {...category} key={category.id} />
+            </motion.div>
+            <motion.div
+              initial={{ y: -10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{
+                delay: (index + 1) * 0.15,
+              }}
+            >
+              {categories.length !== index + 1 && <Separator />}
+            </motion.div>
+          </Fragment>
+        ))}
+      </div>
+    </MotionConfig>
   );
 };

@@ -1,21 +1,24 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Maximize2 } from "lucide-react";
 import Link from "next/link";
 
 import { prisma } from "../../../lib/prisma";
-import { CardDescription } from "../../../components/ui/card";
-import { Button } from "../../../components/ui/button";
-import { MakePublicButton } from "../../../components/make-public/button";
+import { CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { MakePublicButton } from "@/components/make-public/button";
 import {
   addNewTodo,
   deleteTodo,
-  makeCategoryPublic,
   todoToggleStatus,
-} from "../../l/[id]/actions";
-import { TodoList } from "../../../components/todo-list/todo-list";
-import { authOptions } from "../../../pages/api/auth/[...nextauth]";
-import { DialogHeader } from "../../../components/ui/dialog";
+} from "@/server/todo/actions";
+import { TodoList } from "@/components/todo-list/todo-list";
+import { authOptions } from "@/lib/auth";
+import { DialogHeader } from "@/components/ui/dialog";
+import { ExitIntercept } from "@/components/exit-intercept";
+import { makeCategoryPublic } from "@/server/todo-category/actions";
+
+export const dynamic = "force-dynamic";
 
 export default async function ModalTodos({
   params,
@@ -52,6 +55,7 @@ export default async function ModalTodos({
 
   return (
     <>
+      <ExitIntercept />
       <DialogHeader className="flex flex-row justify-between items-center">
         <Button asChild variant={"ghost"}>
           <Link href={"/"}>

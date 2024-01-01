@@ -1,12 +1,14 @@
+import "./globals.css";
+
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
-
 import { Inter as FontSans } from "next/font/google";
-import "./globals.css";
+
 import { cn } from "../lib/utils";
+
 import { Toaster } from "@/components/ui/sonner";
-import { Navbar } from "../components/menu/navbar";
-import { ActionList } from "../components/menu/action-list";
+import { Navbar } from "@/components/menu/navbar";
+import { ActionList } from "@/components/menu/action-list";
 
 const fontSans = FontSans({
   subsets: ["latin"],

@@ -1,6 +1,6 @@
-import { InterceptingModal } from "../../../components/intercepting-modal/intercepting-modal";
-import { DialogHeader } from "../../../components/ui/dialog";
-import { Skeleton } from "../../../components/ui/skeleton";
+import { InterceptingModal } from "@/components/intercepting-modal/intercepting-modal";
+import { DialogHeader } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loading() {
   return (
