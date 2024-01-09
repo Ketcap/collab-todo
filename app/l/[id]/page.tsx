@@ -15,15 +15,8 @@ import { Button } from "@/components/ui/button";
 import { TodoList } from "@/components/todo-list/todo-list";
 import { MakePublicButton } from "@/components/make-public/button";
 
-import {
-  addNewTodo,
-  todoToggleStatus,
-  deleteTodo,
-} from "@/server/todo/actions";
-
 import { prisma } from "@/lib/prisma";
 import { authOptions } from "@/lib/auth";
-import { makeCategoryPublic } from "@/server/todo-category/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -68,7 +61,6 @@ export default async function Home({ params }: { params: { id: string } }) {
           {name}
           <MakePublicButton
             category={category}
-            onMakePublic={makeCategoryPublic}
             isPublic={isPublic}
             session={session}
           />
@@ -82,9 +74,6 @@ export default async function Home({ params }: { params: { id: string } }) {
           canDoActions={canDoActions}
           category={category}
           todos={Todos}
-          onSubmit={addNewTodo}
-          onToggle={todoToggleStatus}
-          onDelete={deleteTodo}
           session={session}
         />
       </CardContent>

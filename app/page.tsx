@@ -11,8 +11,6 @@ import {
 import { CategoryList } from "@/components/todo-list/category-list";
 
 import { prisma } from "@/lib/prisma";
-
-import { addNewCategory } from "@/server/todo-category/actions";
 import { authOptions } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -42,13 +40,7 @@ export default async function MainPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {isLoggedIn && (
-          <CategoryList
-            categories={data}
-            onSubmit={addNewCategory}
-            session={session}
-          />
-        )}
+        {isLoggedIn && <CategoryList categories={data} session={session} />}
       </CardContent>
     </Card>
   );

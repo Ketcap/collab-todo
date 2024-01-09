@@ -1,3 +1,4 @@
+"use server";
 import { nanoId } from "../../lib/id";
 import { prisma } from "../../lib/prisma";
 

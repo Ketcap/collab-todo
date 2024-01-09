@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import usePartySocket from "partysocket/react";
 import { Session } from "next-auth";
 import { MotionConfig, motion, useReducedMotion } from "framer-motion";
+import { addNewCategory } from "@/server/todo-category/actions";
 
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -17,22 +18,16 @@ import { TodoCategorySchema, todoCategorySchema } from "../add-todo/lib";
 import { NotificationAction } from "../../party/notifications";
 import { Checkbox } from "../ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
-import { AddNewCategory } from "@/server/todo-category/actions";
 
 export type CategoryListProps = {
   categories: TodoCategory[];
   session?: Session | null;
-
-  onSubmit: AddNewCategory;
 };
 
 export const CategoryList = ({
   categories = [],
-  onSubmit,
   session,
 }: CategoryListProps) => {
-  const shouldReduceMotion = useReducedMotion();
-
   const { push } = useRouter();
   const [list, setList] = useState<TodoCategory[]>(categories);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +49,7 @@ export const CategoryList = ({
   const handleSubmit = form.handleSubmit(async (values) => {
     setIsLoading(true);
     try {
-      const category = await onSubmit(values);
+      const category = await addNewCategory(values);
       form.reset();
       setList((prev) => [...prev, category]);
       if (category.isPublic) {

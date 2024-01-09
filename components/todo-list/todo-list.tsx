@@ -5,10 +5,10 @@ import { toast } from "sonner";
 
 import { AddTodo, AddTodoProps } from "../add-todo";
 import { TodoListItem } from "./todo-list-item";
-import type {
-  AddNewTodo,
-  DeleteTodo,
-  TodoToggleStatus,
+import {
+  addNewTodo,
+  todoToggleStatus,
+  deleteTodo,
 } from "@/server/todo/actions";
 import usePartySocket from "partysocket/react";
 import { ServerAction } from "../../party";
@@ -21,10 +21,6 @@ export type TodoListProps = {
   todos: Todo[];
   category: TodoCategory;
   canDoActions: boolean;
-  // Actions
-  onSubmit: AddNewTodo;
-  onToggle: TodoToggleStatus;
-  onDelete: DeleteTodo;
   // Session
   session?: Session | null;
 };
@@ -33,9 +29,6 @@ export const TodoList = ({
   category,
   canDoActions,
   todos = [],
-  onSubmit,
-  onToggle,
-  onDelete,
   session,
 }: TodoListProps) => {
   const [todo, setTodos] = useState<Todo[]>(todos);
@@ -69,7 +62,7 @@ export const TodoList = ({
 
   const handleSubmit: AddTodoProps["onSubmit"] = async (values) => {
     try {
-      const newTodo = await onSubmit(values, category.id);
+      const newTodo = await addNewTodo(values, category.id);
       socket.send(
         JSON.stringify({
           action: "create",
@@ -107,7 +100,7 @@ export const TodoList = ({
             : todo
         )
       );
-      const newTodo = await onToggle(id, isChecked);
+      const newTodo = await todoToggleStatus(id, isChecked);
       socket.send(
         JSON.stringify({
           action: "update",
@@ -143,7 +136,7 @@ export const TodoList = ({
     if (!currentTodo) return;
     try {
       setTodos((prev) => prev.filter((todo) => todo.id !== id));
-      await onDelete(id);
+      await deleteTodo(id);
       socket.send(
         JSON.stringify({
           action: "delete",

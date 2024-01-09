@@ -12,20 +12,18 @@ import {
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
-import type { MakeCategoryPublic } from "@/server/todo-category/actions";
 import usePartySocket from "partysocket/react";
 import { NotificationAction } from "../../party/notifications";
 import { Session } from "next-auth";
+import { makeCategoryPublic } from "@/server/todo-category/actions";
 
 export type MakePublicButtonProps = {
   category: TodoCategory;
-  onMakePublic: MakeCategoryPublic;
   isPublic: boolean;
   session?: Session | null;
 };
 
 export const MakePublicButton = ({
-  onMakePublic,
   category,
   isPublic,
   session,
@@ -42,7 +40,7 @@ export const MakePublicButton = ({
   const onConfirm = async () => {
     setIsLoading(true);
     try {
-      await onMakePublic(category.id);
+      await makeCategoryPublic(category.id);
       setIsOpen(false);
       toast.success("List is now public", {
         action: {
